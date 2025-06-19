@@ -1,6 +1,6 @@
 // app/layout.tsx
 
-import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeProvider } from "@/components/ThemeProvider";
 import "./globals.css";
 import { GeistSans } from "geist/font/sans";
 import ClientLayoutWrapper from "@/components/ClientLayoutWrapper"; // 导入新的包装组件
