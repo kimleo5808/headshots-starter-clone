@@ -1,5 +1,6 @@
 // app/layout.tsx
-
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { cookies } from "next/headers";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import "./globals.css";
 import { GeistSans } from "geist/font/sans";
