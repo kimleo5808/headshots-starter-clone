@@ -1,7 +1,10 @@
-import { AvatarIcon } from "@radix-ui/react-icons";
-import { Camera } from "lucide-react"
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import { cookies } from "next/headers";
+// components/Navbar.tsx
+
+"use client"; // 1. 标记为客户端组件
+
+import React from "react"; // 确保导入React
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,104 +12,74 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu";
+import { createClient } from "@/utils/supabase/client"; // 2. 使用客户端的supabase client
+import { useUser } from "@/hooks/useUser"; // 3. 使用 useUser Hook 获取用户信息
+import { useRouter } from "next/navigation";
+import { Camera } from "lucide-react";
 import Link from "next/link";
-import { Button } from "./ui/button";
-import React from "react";
-import { Database } from "@/types/supabase";
-import ClientSideCredits from "./realtime/ClientSideCredits";
-import { ThemeToggle } from "./homepage/theme-toggle";
+import { AvatarIcon } from "@radix-ui/react-icons";
 
-export const dynamic = "force-dynamic";
+export default function Navbar() {
+  const { user } = useUser(); // 使用 Hook 获取用户
+  const router = useRouter();
 
-const stripeIsConfigured = process.env.NEXT_PUBLIC_STRIPE_IS_ENABLED === "true";
-const packsIsEnabled = process.env.NEXT_PUBLIC_TUNE_TYPE === "packs";
-export const revalidate = 0;
-
-export default async function Navbar() {
-  const supabase = createServerComponentClient<Database>({ cookies });
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  const { data: credits } = await supabase
-    .from("credits")
-    .select("*")
-    .eq("user_id", user?.id ?? "")
-    .single();
+  const handleSignOut = async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.refresh(); // 刷新页面以更新状态
+  };
 
   return (
-    <header className="sticky top-0 z-[100] w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center justify-between">
-        <Link href="/" className="flex items-center gap-2 font-bold text-xl">
-          <Camera className="h-5 w-5 text-primary" />
-          <span>Headshots AI</span>
+    <nav className="border-b">
+      <div className="flex items-center justify-between container mx-auto py-4">
+        <Link href="/" className="flex items-center gap-2">
+          <Camera className="w-6 h-6" />
+          <h1 className="text-2xl font-bold">Headshots AI</h1>
         </Link>
-        
-        {user && (
-          <nav className="hidden md:flex gap-6">
-            <Link href="/overview" className="text-sm font-medium hover:text-primary transition-colors">
-              Home
-            </Link>
-            {packsIsEnabled && (
-              <Link href="/overview/packs" className="text-sm font-medium hover:text-primary transition-colors">
-                Packs
-              </Link>
-            )}
-            {stripeIsConfigured && (
-              <Link href="/get-credits" className="text-sm font-medium hover:text-primary transition-colors">
-                Get Credits
-              </Link>
-            )}
-          </nav>
-        )}
 
-        <div className="flex items-center gap-4">
-          <ThemeToggle />
-          
-          {!user && (
-            <>
-              <Link href="/login" className="hidden sm:block text-sm font-medium hover:text-primary transition-colors">
-                Login
-              </Link>
-              <Link href="/login">
-                <Button>Create headshots</Button>
-              </Link>
-            </>
-          )}
-
-          {user && (
-            <div className="flex items-center gap-4">
-              {stripeIsConfigured && (
-                <ClientSideCredits creditsRow={credits ? credits : null} />
-              )}
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" className="h-8 w-8 p-0">
-                    <AvatarIcon className="h-6 w-6 text-primary" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56 z-[101]">
-                  <DropdownMenuLabel className="text-primary text-center overflow-hidden text-ellipsis">
+        {user ? (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                <Avatar className="h-8 w-8">
+                  <AvatarImage src={user?.user_metadata.avatar_url} alt="avatar" />
+                  <AvatarFallback>
+                    <AvatarIcon />
+                  </AvatarFallback>
+                </Avatar>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56" align="end" forceMount>
+              <DropdownMenuLabel className="font-normal">
+                <div className="flex flex-col space-y-1">
+                  <p className="text-sm font-medium leading-none">
+                    {user?.user_metadata.full_name}
+                  </p>
+                  <p className="text-xs leading-none text-muted-foreground">
                     {user.email}
-                  </DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <form action="/auth/sign-out" method="post">
-                    <Button
-                      type="submit"
-                      className="w-full text-left"
-                      variant="ghost"
-                    >
-                      Log out
-                    </Button>
-                  </form>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          )}
-        </div>
+                  </p>
+                </div>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => router.push("/dashboard")}>
+                Dashboard
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => router.push("/get-credits")}>
+                Get Credits
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={handleSignOut}>
+                Log out
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : (
+          <Button asChild>
+            <Link href="/login">Login</Link>
+          </Button>
+        )}
       </div>
-    </header>
+    </nav>
   );
 }
