@@ -18,6 +18,5 @@ export default function ClientLayoutWrapper({
     <main>{children}</main>
     <Toaster />
   </div>
-)
   );
 }
