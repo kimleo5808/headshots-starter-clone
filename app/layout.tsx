@@ -1,10 +1,7 @@
-// app/layout.tsx
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import { cookies } from "next/headers";
-import { ThemeProvider } from "@/components/ThemeProvider";
-import "./globals.css";
 import { GeistSans } from "geist/font/sans";
-import ClientLayoutWrapper from "@/components/ClientLayoutWrapper"; // 导入新的包装组件
+import { ThemeProvider } from "@/components/ThemeProvider";
+import { Analytics } from "@vercel/analytics/react";
+import "./globals.css";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -16,24 +13,23 @@ export const metadata = {
   description: "Generate professional headshots in minutes with AI.",
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={GeistSans.className} suppressHydrationWarning>
-      <body>
+    <html lang="en" className={GeistSans.className}>
+      <body className="bg-background text-foreground">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
+          disableTransitionOnChange
         >
-          {/* 使用新的客户端包装器来包裹 children */}
-          <ClientLayoutWrapper>
-            {children}
-          </ClientLayoutWrapper>
+          {children}
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   );
