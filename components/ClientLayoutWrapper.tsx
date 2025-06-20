@@ -13,10 +13,11 @@ export default function ClientLayoutWrapper({
   children: React.ReactNode;
 }) {
   return (
-    <>
-      <Navbar /> {/* <-- 已修正: 之前是 <Header />, 现在是 <Navbar /> */}
-      <main>{children}</main>
-      <Toaster />
-    </>
+  <div>
+    <Navbar />
+    <main>{children}</main>
+    <Toaster />
+  </div>
+)
   );
 }
