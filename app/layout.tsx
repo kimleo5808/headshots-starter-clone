@@ -1,8 +1,7 @@
 import { GeistSans } from "geist/font/sans";
 import "./globals.css";
-// import { Analytics } from "@vercel/analytics/react"; // 删除了这一行
 import Navbar from "@/components/Navbar";
-import { Toaster } from "@/components/ui/toaster";
+// import { Toaster } from "@/components/ui/toaster"; // 删除了这一行
 
 export const metadata = {
   title: "Headshots AI",
@@ -20,9 +19,8 @@ export default function RootLayout({
         <div className="relative flex min-h-screen flex-col">
           <Navbar />
           <main className="flex-1">{children}</main>
-          <Toaster />
+          {/* <Toaster /> */} {/* 删除了这一行 */}
         </div>
-        {/* <Analytics /> */} {/* 删除了这一行 */}
       </body>
     </html>
   );
