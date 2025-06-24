@@ -1,8 +1,8 @@
 import { GeistSans } from "geist/font/sans";
 import "./globals.css";
-import Navbar from "@/components/Navbar"; // 恢复这一行
-import { Toaster } from "@/components/ui/toaster"; // 我们也把 Toaster 加回来
-import { Analytics } from "@vercel/analytics/react"; // Analytics 也加回来
+import Navbar from "@/components/Navbar";
+import { Toaster } from "@/components/ui/toaster";
+import { Analytics } from "@vercel/analytics/react";
 
 export const metadata = {
   title: "Headshots AI",
@@ -11,3 +11,19 @@ export const metadata = {
 
 export default function RootLayout({
   children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en">
+      <body className={GeistSans.className}>
+        <div className="relative flex min-h-screen flex-col">
+          <Navbar />
+          <main className="flex-1">{children}</main>
+          <Toaster />
+        </div>
+        <Analytics />
+      </body>
+    </html>
+  );
+}
