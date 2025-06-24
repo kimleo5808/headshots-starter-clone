@@ -3,12 +3,8 @@ import "./globals.css";
 import { Analytics } from "@vercel/analytics/react";
 import Navbar from "@/components/Navbar";
 import { Toaster } from "@/components/ui/toaster";
-import dynamic from "next/dynamic";
 
-// 这是最终的、最简单的、最正确的动态导入方式
-const Providers = dynamic(() => import("@/components/providers"), {
-  ssr: false,
-});
+// 我们已经删除了所有和 ThemeProvider、Providers 相关的代码
 
 export const metadata = {
   title: "Headshots AI",
@@ -21,15 +17,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    // 我们把 <Providers> 彻底移除了
+    <html lang="en">
       <body className={GeistSans.className}>
-        <Providers>
-          <div className="relative flex min-h-screen flex-col">
-            <Navbar />
-            <main className="flex-1">{children}</main>
-            <Toaster />
-          </div>
-        </Providers>
+        <div className="relative flex min-h-screen flex-col">
+          <Navbar />
+          <main className="flex-1">{children}</main>
+          <Toaster />
+        </div>
         <Analytics />
       </body>
     </html>
