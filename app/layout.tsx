@@ -24,10 +24,16 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {/* 这里负责布局，解决了 React.Children.only 的问题 */}
-          <Navbar />
-          <main className="pt-28 sm:pt-36">{children}</main>
-          <Toaster />
+          {/* 
+            这是最终的修复！
+            我们用一个 React Fragment 把所有子元素包裹起来，
+            这样 ThemeProvider 就只接收到了一个子元素。
+          */}
+          <>
+            <Navbar />
+            <main className="pt-28 sm:pt-36">{children}</main>
+            <Toaster />
+          </>
         </ThemeProvider>
         <Analytics />
       </body>
