@@ -1,16 +1,10 @@
-import { Shell } from "../components/shell";
-import { Heading } from "../components/ui/heading";
-import { Text } from "../components/ui/text";
-
 export default function NotFoundPage() {
   return (
-    <Shell>
-      <>
-        <Heading size="xl">Page Not Found</Heading>
-        <Text className="mt-4 text-center text-muted-foreground">
-          The page you’re looking for doesn’t exist.
-        </Text>
-      </>
-    </Shell>
+    <div className="flex flex-col items-center justify-center min-h-screen p-4">
+      <h1 className="text-4xl font-bold">Page Not Found</h1>
+      <p className="mt-4 text-center text-gray-500">
+        The page you’re looking for doesn’t exist.
+      </p>
+    </div>
   );
 }
