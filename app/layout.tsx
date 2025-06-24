@@ -1,14 +1,11 @@
 import { GeistSans } from "geist/font/sans";
-import { ThemeProvider } from "@/components/ThemeProvider";
-import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
-
-const defaultUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : "http://localhost:3000";
+import { Analytics } from "@vercel/analytics/react";
+import { ThemeProvider } from "@/components/ThemeProvider";
+import Navbar from "@/components/Navbar";
+import { Toaster } from "@/components/ui/toaster";
 
 export const metadata = {
-  metadataBase: new URL(defaultUrl),
   title: "Headshots AI",
   description: "Generate professional headshots in minutes with AI.",
 };
@@ -19,15 +16,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={GeistSans.className}>
-      <body className="bg-background text-foreground">
+    <html lang="en" suppressHydrationWarning>
+      <body className={GeistSans.className}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <Navbar />
+          <main className="pt-28 sm:pt-36">{children}</main>
+          <Toaster />
         </ThemeProvider>
         <Analytics />
       </body>
