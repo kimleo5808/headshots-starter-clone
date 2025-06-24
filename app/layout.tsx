@@ -25,15 +25,17 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           {/* 
-            这是最终的修复！
-            我们用一个 React Fragment 把所有子元素包裹起来，
-            这样 ThemeProvider 就只接收到了一个子元素。
+            这是一个真正的 <div>，而不是 Fragment。
+            这个 <div> 是 ThemeProvider 唯一、真正的子元素。
+            它将作为我们所有页面内容的根容器。
+            我们还添加了一些 flex 布局类，以确保页面布局正常。
           */}
-          <>
+          <div className="relative flex min-h-screen flex-col">
             <Navbar />
-            <main className="pt-28 sm:pt-36">{children}</main>
+            {/* flex-1 让 main 区域自动填充剩余空间 */}
+            <main className="flex-1">{children}</main>
             <Toaster />
-          </>
+          </div>
         </ThemeProvider>
         <Analytics />
       </body>
