@@ -1,6 +1,6 @@
-import { Shell } from "@/components/shell";
-import { Heading } from "@/components/ui/heading";
-import { Text } from "@/components/ui/text";
+import { Shell } from "../../../components/shell";
+import { Heading } from "../../../components/ui/heading";
+import { Text } from "../../../components/ui/text";
 
 export default function LoginFailedPage() {
   return (
