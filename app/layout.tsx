@@ -24,6 +24,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          {/* 这里负责布局，解决了 React.Children.only 的问题 */}
           <Navbar />
           <main className="pt-28 sm:pt-36">{children}</main>
           <Toaster />
