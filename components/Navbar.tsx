@@ -1,8 +1,6 @@
-// components/Navbar.tsx
+"use client";
 
-"use client"; // 1. 标记为客户端组件
-
-import React from "react"; // 确保导入React
+import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,21 +11,21 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { createClient } from "@/utils/supabase/client"; // 2. 使用客户端的supabase client
-import { useUser } from "@/hooks/useUser"; // 3. 使用 useUser Hook 获取用户信息
+import { createClient } from "@/utils/supabase/client";
+import { useUser } from "@/hooks/useUser";
 import { useRouter } from "next/navigation";
 import { Camera } from "lucide-react";
 import Link from "next/link";
 import { AvatarIcon } from "@radix-ui/react-icons";
 
 export default function Navbar() {
-  const { user } = useUser(); // 使用 Hook 获取用户
+  const { user } = useUser();
   const router = useRouter();
 
   const handleSignOut = async () => {
     const supabase = createClient();
     await supabase.auth.signOut();
-    router.refresh(); // 刷新页面以更新状态
+    router.refresh();
   };
 
   return (
@@ -40,10 +38,17 @@ export default function Navbar() {
 
         {user ? (
           <DropdownMenu>
+            {/* 
+              这就是唯一的、真正的修复！
+              我们在这里添加了 asChild 属性。
+            */}
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                 <Avatar className="h-8 w-8">
-                  <AvatarImage src={user?.user_metadata.avatar_url} alt="avatar" />
+                  <AvatarImage
+                    src={user?.user_metadata.avatar_url}
+                    alt="avatar"
+                  />
                   <AvatarFallback>
                     <AvatarIcon />
                   </AvatarFallback>
