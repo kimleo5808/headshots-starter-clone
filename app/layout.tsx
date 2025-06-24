@@ -1,8 +1,7 @@
 import { GeistSans } from "geist/font/sans";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/react";
-// 直接从 next-themes 导入官方的 ThemeProvider
-import { ThemeProvider } from "next-themes"; 
+import { ThemeProvider } from "next-themes";
 import Navbar from "@/components/Navbar";
 import { Toaster } from "@/components/ui/toaster";
 
@@ -19,7 +18,6 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={GeistSans.className}>
-        {/* 这里直接使用官方的 ThemeProvider */}
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -28,7 +26,11 @@ export default function RootLayout({
         >
           <div className="relative flex min-h-screen flex-col">
             <Navbar />
-            <main className="flex-1 pt-28 sm:pt-36">{children}</main>
+            {/* 
+              这是最终的修复：
+              我们移除了 main 标签上的内边距 class。
+            */}
+            <main className="flex-1">{children}</main>
             <Toaster />
           </div>
         </ThemeProvider>
