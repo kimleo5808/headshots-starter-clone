@@ -8,9 +8,11 @@ import { Toaster } from "@/components/ui/toaster"
 export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
   return (
     <NextThemesProvider {...props}>
+    <>
       <Navbar />
       <main className="pt-28 sm:pt-36">{children}</main>
       <Toaster />
+    </>
     </NextThemesProvider>
   )
 }
